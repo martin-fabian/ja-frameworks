@@ -1,4 +1,4 @@
-package cz.eg.hr.controller;
+package cz.eg.hr.controllers;
 
 import cz.eg.hr.rest.Errors;
 import cz.eg.hr.rest.ValidationError;
