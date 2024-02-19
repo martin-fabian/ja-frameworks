@@ -32,12 +32,12 @@ public class JavascriptFrameworkServiceImpl implements JavascriptFrameworkServic
 
     @Override
     public JavascriptFrameworkResponseDto create(JavascriptFrameworkRequestDto dto) {
-        Optional<JavascriptFramework> existingFramework = javascriptFrameworkRepository.findByName(dto.getName());
+        Optional<JavascriptFramework> existingFramework = javascriptFrameworkRepository.findByName(dto.name());
         existingFramework.ifPresent(framework -> {
-            throw new BadRequestException(String.format("Framework with name %s already exists", dto.getName()));
+            throw new BadRequestException(String.format("Framework with name %s already exists", dto.name()));
         });
 
-        List<Version> versions = versionMapper.dtosToEntities(dto.getVersions());
+        List<Version> versions = versionMapper.dtosToEntities(dto.versions());
         JavascriptFramework javascriptFramework = javascriptFrameworkMapper.dtoToEntity(dto);
 
         for (Version version : versions) {
@@ -54,15 +54,15 @@ public class JavascriptFrameworkServiceImpl implements JavascriptFrameworkServic
         AtomicReference<JavascriptFrameworkResponseDto> javascriptFramework = new AtomicReference<>();
         existingFramework.ifPresentOrElse(frameworkEntity -> {
                 if (!isNameBelongingToUpdatedObject(dto, id)) {
-                    throw new BadRequestException(String.format("Framework with name %s already exists", dto.getName()));
+                    throw new BadRequestException(String.format("Framework with name %s already exists", dto.name()));
                 }
                 frameworkEntity.getVersions().clear();
-                List<Version> versions = versionMapper.dtosToEntities(dto.getVersions());
+                List<Version> versions = versionMapper.dtosToEntities(dto.versions());
                 versions.forEach(version -> version.setJavascriptFramework(frameworkEntity));
                 frameworkEntity.setVersions(versions);
-                frameworkEntity.setRating(dto.getRating());
-                frameworkEntity.setName(dto.getName());
-                frameworkEntity.setLastSupportedDate(dto.getLastSupportedDate());
+                frameworkEntity.setRating(dto.rating());
+                frameworkEntity.setName(dto.name());
+                frameworkEntity.setLastSupportedDate(dto.lastSupportedDate());
                 javascriptFramework.set(javascriptFrameworkMapper.entityToDto(javascriptFrameworkRepository.save(frameworkEntity)));
             },
             () -> {
@@ -72,7 +72,7 @@ public class JavascriptFrameworkServiceImpl implements JavascriptFrameworkServic
     }
 
     private boolean isNameBelongingToUpdatedObject(JavascriptFrameworkRequestDto javascriptFrameworkRequestDto, Long id) {
-        Optional<JavascriptFramework> existingJavascript = javascriptFrameworkRepository.findByName(javascriptFrameworkRequestDto.getName());
+        Optional<JavascriptFramework> existingJavascript = javascriptFrameworkRepository.findByName(javascriptFrameworkRequestDto.name());
         return existingJavascript.map(framework -> framework.getId().equals(id)).orElse(false);
     }
 
