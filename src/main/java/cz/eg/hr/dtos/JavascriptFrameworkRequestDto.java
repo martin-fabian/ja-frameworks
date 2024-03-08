@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record JavascriptFrameworkRequestDto(
-    Long id,
     @NotBlank(message = "Name cannot be empty") String name,
     List<VersionRequestDto> versions,
     LocalDate lastSupportedDate,
