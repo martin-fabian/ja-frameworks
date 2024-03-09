@@ -32,10 +32,10 @@ public class JavascriptFrameworkServiceImpl implements JavascriptFrameworkServic
 
     @Override
     public JavascriptFrameworkResponseDto create(JavascriptFrameworkRequestDto dto) {
-        Optional<JavascriptFramework> existingFramework = javascriptFrameworkRepository.findByName(dto.name());
-        existingFramework.ifPresent(framework -> {
+        var isFrameworkAlreadyExisting = javascriptFrameworkRepository.existsByName(dto.name());
+        if (isFrameworkAlreadyExisting) {
             throw new BadRequestException(String.format("Framework with name %s already exists", dto.name()));
-        });
+        }
 
         List<Version> versions = versionMapper.dtosToEntities(dto.versions());
         JavascriptFramework javascriptFramework = javascriptFrameworkMapper.dtoToEntity(dto);

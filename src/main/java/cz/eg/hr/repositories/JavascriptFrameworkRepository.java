@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface JavascriptFrameworkRepository extends JpaRepository<JavascriptFramework, Long> {
     Optional<JavascriptFramework> findByName(String name);
 
+    boolean existsByName(String name);
+
     @Query("SELECT j FROM JavascriptFramework j " +
         "WHERE (:nameContains IS NULL OR j.name LIKE CONCAT('%', :nameContains, '%')) " +
         "AND (:startDate IS NULL OR j.lastSupportedDate >= :startDate) " +
